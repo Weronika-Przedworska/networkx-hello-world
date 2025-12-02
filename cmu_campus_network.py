@@ -66,15 +66,28 @@ print("Part 3: Finding shortest paths...")
 start = 'Gates Hillman Center'
 end = 'Hunt Library'
 
+G = nx.Graph()  # Undirected graph
+
+for node1,node2,time in paths:
+    G.add_nodes_from(buildings)  # Add nodes
+    G.add_edge(node1, node2, weight=time)  # Add weighted edges
+
 # YOUR CODE HERE: Use nx.shortest_path() to find the shortest route
-# shortest_path = 
+path = nx.shortest_path(G, start, end, weight='weight')
+
+shortest_path = path
+
+distance = nx.shortest_path_length(G, start, end, weight='weight')
 
 # YOUR CODE HERE: Use nx.shortest_path_length() to find the walking time
-# walking_time = 
+walking_time = distance
 
-# print(f"\nShortest route from {start} to {end}:")
-# print(f"  Route: {' -> '.join(shortest_path)}")
-# print(f"  Walking time: {walking_time} minutes")
+avg = nx.average_shortest_path_length(G, weight='weight')
+
+
+print(f"\nShortest route from {start} to {end}:")
+print(f"  Route: {' -> '.join(shortest_path)}")
+print(f"  Walking time: {walking_time} minutes")
 
 # ============================================================================
 # PART 4: Network Analysis
@@ -84,10 +97,11 @@ print("Part 4: Analyzing the network...")
 # TODO: Calculate the degree (number of connections) for each building
 print("\nConnections per building:")
 for building in G.nodes():
+    betweenness = nx.betweenness_centrality(G, weight='weight')
     # YOUR CODE HERE: Use G.degree(building) to get the number of connections
     pass
-    # degree = 
-    # print(f"  {building:25s}: {degree} connections")
+    degree = G.degree(building)
+    print(f"  {building:25s}: {degree} connections")
 
 # TODO: Calculate betweenness centrality (which buildings are most "central")
 # betweenness = 
@@ -98,6 +112,7 @@ for building in G.nodes():
 # PART 5: Visualization
 # ============================================================================
 print("Part 5: Creating visualization...")
+
 
 plt.figure(figsize=(12, 8))
 
@@ -118,6 +133,11 @@ nx.draw_networkx_edges(G, pos, edge_color='gray', width=2, alpha=0.6)
 edge_labels = nx.get_edge_attributes(G, 'weight')
 edge_labels = {k: f"{v} min" for k, v in edge_labels.items()}
 nx.draw_networkx_edge_labels(G, pos, edge_labels, font_size=9)
+
+pos = nx.spring_layout(G)  # Position nodes
+nx.draw_networkx_nodes(G, pos)  # Draw nodes
+nx.draw_networkx_edges(G, pos)  # Draw edges
+nx.draw_networkx_labels(G, pos)  # Add labels
 
 plt.title("CMU Campus Walking Network", fontsize=16, fontweight='bold')
 plt.axis('off')
