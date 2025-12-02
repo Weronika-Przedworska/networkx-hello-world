@@ -79,6 +79,10 @@ shortest_path = path
 
 distance = nx.shortest_path_length(G, start, end, weight='weight')
 
+# FIND ALL PATHS
+
+all_paths = nx.all_simple_paths(G, start, end)
+
 # YOUR CODE HERE: Use nx.shortest_path_length() to find the walking time
 walking_time = distance
 
@@ -87,6 +91,12 @@ avg = nx.average_shortest_path_length(G, weight='weight')
 
 print(f"\nShortest route from {start} to {end}:")
 print(f"  Route: {' -> '.join(shortest_path)}")
+print(f"All routes from {start} to {end}:")
+
+for route in all_paths:
+    counter=1
+    print(f"  Route {counter}: {route}" )
+    counter=counter+1
 print(f"  Walking time: {walking_time} minutes")
 
 # ============================================================================
@@ -97,16 +107,16 @@ print("Part 4: Analyzing the network...")
 # TODO: Calculate the degree (number of connections) for each building
 print("\nConnections per building:")
 for building in G.nodes():
-    betweenness = nx.betweenness_centrality(G, weight='weight')
+
     # YOUR CODE HERE: Use G.degree(building) to get the number of connections
     pass
     degree = G.degree(building)
     print(f"  {building:25s}: {degree} connections")
 
 # TODO: Calculate betweenness centrality (which buildings are most "central")
-# betweenness = 
-# most_central = max(betweenness, key=betweenness.get)
-# print(f"\nMost central building: {most_central}")
+betweenness = nx.betweenness_centrality(G, weight='weight')
+most_central = max(betweenness, key=betweenness.get)
+print(f"\nMost central building: {most_central}")
 
 # ============================================================================
 # PART 5: Visualization
@@ -158,7 +168,7 @@ print("Network exported to cmu_networks.graphml (can be opened in other tools)")
 # ============================================================================
 # Part 6: Harder Challenges (Pick 1 Challenge)
 # ============================================================================
-print("\n1. Find ALL possible paths from Gates Hillman Center to Hunt Library:")
+print("\n1. Find ALL possible paths from Gates Hillman Center to Hunt Library: (DONE)")
 # TODO: Use nx.all_simple_paths() to find all routes
 
 print("\n2. What if Wean Hall is closed for construction?")
